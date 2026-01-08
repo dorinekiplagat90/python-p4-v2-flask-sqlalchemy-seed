@@ -1,21 +1,13 @@
-#!/usr/bin/env python3
-#server/seed.py
+from flask_sqlalchemy import SQLAlchemy
 
-from app import app
-from models import db, Pet
+db = SQLAlchemy()
 
-with app.app_context():
+class Pet(db.Model):
+    __tablename__ = "pets"
 
-    # Create an empty list
-    pets = []
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    species = db.Column(db.String, nullable=False)
 
-    # Add some Pet instances to the list
-    pets.append(Pet(name = "Fido", species = "Dog"))
-    pets.append(Pet(name = "Whiskers", species = "Cat"))
-    pets.append(Pet(name = "Hermie", species = "Hamster"))
-
-    # Insert each Pet in the list into the database table
-    db.session.add_all(pets)
-
-    # Commit the transaction
-    db.session.commit()
+    def __repr__(self):
+        return f"<Pet {self.id}, {self.name}, {self.species}>"
